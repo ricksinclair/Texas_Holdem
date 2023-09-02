@@ -9,6 +9,7 @@ import com.ulrictodman.texas_holdem.model.Player;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class HighCardStrategy implements HandRankingStrategy {
@@ -22,7 +23,7 @@ public class HighCardStrategy implements HandRankingStrategy {
         fullHand.addAll ( dealer.getCommunityCards () );
         int lastIndex = fullHand.size () - 1;
         int secondToLastIndex = fullHand.size () - 2;
-        fullHand.sort ( ( card1, card2 ) -> card1.getRank ().compareTo ( card2.getRank () ) );
+        fullHand.sort ( Comparator.comparing ( Card::getRank ) );
         Card highCard = fullHand.get ( lastIndex );
 
         if ( areLastCardsIdentical ( fullHand, lastIndex, secondToLastIndex ) ) {
@@ -41,7 +42,7 @@ public class HighCardStrategy implements HandRankingStrategy {
         List<Card> fullHand = new ArrayList<> ();
         fullHand.addAll ( player.getHand () );
         fullHand.addAll ( dealer.getCommunityCards () );
-        fullHand.sort ( ( card1, card2 ) -> card1.getRank ().compareTo ( card2.getRank () ) );
+        fullHand.sort ( Comparator.comparing ( Card::getRank ));
         return fullHand.subList ( 2, fullHand.size () );
     }
 
@@ -60,7 +61,5 @@ public class HighCardStrategy implements HandRankingStrategy {
         dealer.dealCard ( player );
         dealer.dealCard ( player );
         System.out.println ( highCardStrategy.evaluateHand ( player, dealer ) );
-
-
     }
 }
